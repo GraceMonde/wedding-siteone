@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guest list | Justin &amp; Chanda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Manrope:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    html, body { height: auto; min-height: 100%; }
+    body { background: var(--paper); overflow: auto; padding: 3rem 1.2rem 4rem; }
+    h1 { font: italic 400 clamp(2.2rem, 8vw, 3.2rem)/1.1 var(--serif); color: var(--brown); }
+    p { color: #4a5c75; }
+    .wrap { max-width: 42rem; margin: 0 auto; text-align: center; }
+    .stats { display: flex; justify-content: center; gap: 2.5rem; margin: 2.2rem 0; flex-wrap: wrap; }
+    .stat b { display: block; font: 300 3.2rem/1 var(--serif); color: var(--terra); }
+    .stat span { font-size: .95rem; opacity: .8; }
+    .tabs { display: flex; justify-content: center; gap: .6rem; margin-bottom: 1.5rem; }
+    .tabs button { padding: .45rem 1.1rem; font: inherit; color: var(--brown); background: transparent; border: 1px solid rgba(31,58,95,.35); border-radius: 999px; cursor: pointer; }
+    .tabs button.on { background: var(--terra); color: #fff; border-color: var(--terra); }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th { font: 500 1.1rem var(--serif); color: var(--terra); padding: .6rem .8rem; border-bottom: 1px solid var(--terra); }
+    td { padding: .8rem; border-bottom: 1px solid rgba(31,58,95,.15); color: var(--ink); }
+    td.n { text-align: center; }
+    td.note { white-space: pre-wrap; overflow-wrap: anywhere; }
+    .pill { display: inline-block; padding: .15rem .8rem; font-size: .9rem; border-radius: 99px; border: 1px solid; }
+    .pill.yes { color: #4f7a43; border-color: #4f7a43; }
+    .pill.no { color: #a84b2c; border-color: #a84b2c; }
+    #msg { margin-top: 1.5rem; opacity: .75; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Guest list</h1>
+    <p>Justin &amp; Chanda, 5 December 2026</p>
+
+    <div class="stats">
+      <div class="stat"><b id="s-yes">0</b><span>coming</span></div>
+      <div class="stat"><b id="s-no">0</b><span>can't make it</span></div>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <button data-f="all" class="on">Everyone</button>
+      <button data-f="yes">Coming</button>
+      <button data-f="no">Not coming</button>
+    </div>
+
+    <table>
+      <thead><tr><th>Name</th><th>Reply</th><th>Note</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p id="msg">Loading replies…</p>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    let guests = [], filter = "all";
+    const $ = id => document.getElementById(id);
+
+    async function load() {
+      if (!CONFIG.rsvpEndpoint) { $("msg").textContent = "Add your Apps Script URL to config.js to see replies."; return; }
+      try {
+        const res = await fetch(CONFIG.rsvpEndpoint);
+        guests = await res.json();
+        $("msg").textContent = guests.length ? "" : "No replies yet.";
+        render();
+      } catch (e) {
+        $("msg").textContent = "Couldn't load replies. Check the URL in config.js and that the script is deployed for Anyone.";
+      }
+    }
+
+    function render() {
+      const yes = guests.filter(g => g.attending === "yes");
+      $("s-yes").textContent = yes.length;
+      $("s-no").textContent = guests.length - yes.length;
+
+      const body = $("rows");
+      body.replaceChildren();
+      guests.filter(g => filter === "all" || g.attending === filter).forEach(g => {
+        const tr = body.insertRow();
+        tr.insertCell().textContent = g.name; // textContent keeps names from injecting HTML
+        const pill = document.createElement("span");
+        pill.className = "pill " + (g.attending === "yes" ? "yes" : "no");
+        pill.textContent = g.attending === "yes" ? "Coming" : "Can't make it";
+        tr.insertCell().append(pill);
+        const note = tr.insertCell();
+        note.className = "note";
+        note.textContent = g.note || "";
+      });
+    }
+
+    $("tabs").addEventListener("click", e => {
+      if (!e.target.dataset.f) return;
+      filter = e.target.dataset.f;
+      [...$("tabs").children].forEach(b => b.classList.toggle("on", b === e.target));
+      render();
+    });
+
+    load();
+    setInterval(load, 60000); // refresh every minute
+  </script>
+</body>
+</html>

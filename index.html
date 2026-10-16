@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14243f">
+  <title>Justin &amp; Chanda | Wedding Invitation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Great+Vibes&family=Manrope:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Shared paint (gradients) used by the artwork. Must stay in the page. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <radialGradient id="g-orb" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#7fa9e0" stop-opacity=".5"/><stop offset="1" stop-color="#7fa9e0" stop-opacity="0"/></radialGradient>
+      <linearGradient id="g-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f3d66"/><stop offset=".55" stop-color="#14263f"/><stop offset="1" stop-color="#0c1a2f"/></linearGradient>
+    </defs>
+  </svg>
+
+  <!-- Top bar: Menu, page progress, pause -->
+  <header id="bar">
+    <button id="menu-btn" type="button" aria-haspopup="dialog">Menu</button>
+    <nav id="progress" aria-label="Pages"></nav>
+    <div class="right">
+      <button id="music" type="button" aria-label="Mute music" aria-pressed="false" hidden>
+        <svg class="i-on" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.6L8 3v10L4.6 10H2z"/><path d="M10.4 5.6a3.5 3.5 0 0 1 0 4.8M12.2 3.8a6 6 0 0 1 0 8.4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <svg class="i-off" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.6L8 3v10L4.6 10H2z"/><path d="M10.6 6l3.4 4M14 6l-3.4 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+      <button id="toggle" type="button" aria-label="Pause slideshow" aria-pressed="false">
+      <svg class="i-pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.5" height="12" rx="1"/><rect x="9.5" y="2" width="3.5" height="12" rx="1"/></svg>
+      <svg class="i-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.2v11.6a.8.8 0 0 0 1.2.7l9-5.8a.8.8 0 0 0 0-1.4l-9-5.8A.8.8 0 0 0 4 2.2z"/></svg>
+    </button>
+    </div>
+  </header>
+
+  <main id="deck">
+    <!--
+      Every page is a split scene: an art panel (drawn by script.js, no photos) next to a cream panel with flowers.
+      Per page (all optional):
+        data-art       the artwork on the dark panel: plain, rings, orbs or sprigs
+        data-title     the name shown in the Menu
+        data-duration  seconds on this page (default is in config.js, 0 = wait until the guest moves on)
+        class "rev"    puts the art panel on the right instead of the left (on wide screens)
+        class "grow"   on a wrapper: the words inside slowly grow for as long as the page is shown
+      The wedding date, countdown and (optional) venue are at the top of script.js. Colours and fonts are at the top of style.css.
+    -->
+
+    <!-- 1. Cover -->
+    <section class="slide cover" data-art="plain" data-title="Welcome" data-duration="10">
+      <div class="art"><div class="arch"><div class="text">
+        <p class="reveal eyebrow">Wedding invitation</p>
+      </div></div></div>
+      <div class="paper"><div class="content">
+        <h1 class="reveal names">Justin &amp; Chanda</h1>
+        <p class="reveal tagline">We're getting married!</p>
+        <p class="reveal date">Saturday &middot; 5 December 2026</p>
+        <div class="reveal countdown" id="countdown" aria-live="off"></div>
+      </div></div>
+    </section>
+
+    <!-- 2. Song of Solomon -->
+    <section class="slide rev" data-art="plain" data-title="Song of Solomon" data-duration="12">
+      <div class="art"><div class="text">
+        <p class="reveal script big">Love</p>
+      </div></div>
+      <div class="paper"><div class="content">
+        <div class="grow" style="--zoom:1.18">
+          <p class="reveal verse">I found him whom my soul loveth: I held him, and would not let him go.</p>
+          <p class="reveal cite">Song of Solomon 3:4</p>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- 3. The message -->
+    <section class="slide" data-art="rings" data-title="Our invitation" data-duration="10">
+      <div class="art"><div class="text">
+        <h2 class="reveal names">Justin &amp; Chanda</h2>
+      </div></div>
+      <div class="paper"><div class="content">
+        <p class="reveal message">Together with their families, warmly invite you to celebrate with them as they honor their love and begin their journey as one.</p>
+      </div></div>
+    </section>
+
+    <!-- 4. The date: December 2026 calendar (built by script.js) with a throbbing ring round the 5th -->
+    <section class="slide rev" data-art="orbs" data-title="The date" data-duration="12">
+      <div class="art"><div class="text">
+        <p class="reveal outline-num">05</p>
+        <p class="reveal script">December 2026</p>
+      </div></div>
+      <div class="paper"><div class="content">
+        <div id="cal" class="reveal calendar"></div>
+        <p class="reveal date">Saturday, December 5, 2026</p>
+      </div></div>
+    </section>
+
+    <!-- 5. Gifts: the padlock photo fills the top (or left) panel -->
+    <section class="slide photo-slide" data-art="none" data-title="Gifts" data-duration="10">
+      <div class="art">
+        <figure class="photo" style="--bg:url(images/lock.jpeg); --pos:50% 72%; --pos-p:50% 80%">
+          <img src="images/lock.jpeg" alt="A blue padlock engraved with Justin and Chanda, 05-12-26, God is Love, with their rings resting on it">
+        </figure>
+      </div>
+      <div class="paper"><div class="content">
+        <svg class="reveal gift" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="8" y="23" width="48" height="10" rx="1.5"/>
+          <rect x="11" y="33" width="42" height="23" rx="1.5"/>
+          <path d="M29 23v33M35 23v33" />
+          <rect x="29" y="23" width="6" height="33" fill="currentColor" fill-opacity=".22" stroke="none"/>
+          <path d="M32 23C26 9 11 10 17 21c1.5 2.5 9 2.5 15 2zM32 23c6-14 21-13 15-2-1.5 2.5-9 2.5-15 2z"/>
+          <circle cx="32" cy="23" r="2.2" fill="currentColor" stroke="none"/>
+        </svg>
+        <p class="reveal gift-text">Monetary gifts are welcome to help set up our home.</p>
+      </div></div>
+    </section>
+
+    <!-- 6. Mark 10:9: the rings photo already carries the verse. On a phone it fills the whole screen;
+         on a wide screen it takes the left half and "J & C" sits beside it. -->
+    <section class="slide rev photo-slide full" data-art="none" data-title="Mark 10:9" data-duration="12">
+      <div class="art">
+        <figure class="photo" style="--bg:url(images/rings.jpeg); --pos:50% 32%; --pos-p:50% 50%">
+          <img src="images/rings.jpeg" alt="Two gold wedding rings on pale blue satin. Mark 10:9: What therefore God hath joined together, let not man put asunder.">
+        </figure>
+      </div>
+      <div class="paper"><div class="content">
+        <p class="reveal eyebrow">Justin &amp; Chanda</p>
+        <p class="reveal script">J &amp; C</p>
+        <p class="reveal date">5 &middot; 12 &middot; 2026</p>
+      </div></div>
+    </section>
+
+    <!-- 7. RSVP (duration 0: the page waits while guests fill in the form) -->
+    <section class="slide rsvp" data-art="sprigs" data-title="RSVP" data-duration="0">
+      <div class="art"><div class="text">
+        <p class="reveal eyebrow">Kindly reply</p>
+        <p class="reveal script big">Will you join us?</p>
+      </div></div>
+      <div class="paper"><div class="content">
+        <h2 class="reveal">RSVP</h2>
+        <form id="rsvp" class="reveal">
+          <input name="name" placeholder="Your full name" required maxlength="100" pattern=".*\S.*" title="Please enter your name" autocomplete="name">
+          <select name="attending" required>
+            <option value="" disabled selected>Can you make it?</option>
+            <option value="yes">Yes, with pleasure</option>
+            <option value="no">Sorry, I can't</option>
+          </select>
+          <textarea name="note" rows="2" placeholder="Add a note (optional)"></textarea>
+          <button type="submit" class="btn solid">Send my reply</button>
+          <p id="rsvp-status" role="status"></p>
+        </form>
+      </div></div>
+    </section>
+  </main>
+
+  <!-- Opening screen: only shown when the browser blocks music from starting by itself (see script.js) -->
+  <div id="gate" hidden>
+    <div class="gate-inner">
+      <p class="eyebrow">You're invited</p>
+      <p class="gate-names">Justin &amp; Chanda</p>
+      <button id="gate-open" type="button">Open invitation</button>
+      <p class="gate-hint">Sound on for the full experience</p>
+    </div>
+  </div>
+
+  <dialog id="menu" aria-label="Pages">
+    <button id="menu-close" type="button" aria-label="Close menu">Close</button>
+    <ol id="menu-list"></ol>
+  </dialog>
+
+  <dialog id="thanks" aria-labelledby="thanks-title">
+    <h2 id="thanks-title">Reply received</h2>
+    <p id="thanks-msg"></p>
+    <button id="thanks-close" type="button" autofocus>Close</button>
+  </dialog>
+
+  <audio id="music-player" preload="auto"></audio>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
